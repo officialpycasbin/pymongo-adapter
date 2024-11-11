@@ -1,8 +1,8 @@
 PyMongo Adapter for PyCasbin
 ====
 
-[![Build Status](https://www.travis-ci.org/pycasbin/pymongo-adapter.svg?branch=master)](https://www.travis-ci.org/pycasbin/pymongo-adapter)
-[![Coverage Status](https://coveralls.io/repos/github/pycasbin/pymongo-adapter/badge.svg)](https://coveralls.io/github/pycasbin/pymongo-adapter)
+[![Build Status](https://www.travis-ci.org/officialpycasbin/pymongo-adapter.svg?branch=master)](https://www.travis-ci.org/officialpycasbin/pymongo-adapter)
+[![Coverage Status](https://coveralls.io/repos/github/officialpycasbin/pymongo-adapter/badge.svg)](https://coveralls.io/github/officialpycasbin/pymongo-adapter)
 [![Version](https://img.shields.io/pypi/v/casbin_pymongo_adapter.svg)](https://pypi.org/project/casbin_pymongo_adapter/)
 [![PyPI - Wheel](https://img.shields.io/pypi/wheel/casbin_pymongo_adapter.svg)](https://pypi.org/project/casbin_pymongo_adapter/)
 [![Pyversions](https://img.shields.io/pypi/pyversions/casbin_pymongo_adapter.svg)](https://pypi.org/project/casbin_pymongo_adapter/)
