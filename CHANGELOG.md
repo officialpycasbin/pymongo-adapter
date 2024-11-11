@@ -1,5 +1,12 @@
 # Semantic Versioning Changelog
 
+# [1.2.0](https://github.com/officialpycasbin/pymongo-adapter/compare/v1.1.1...v1.2.0) (2024-11-11)
+
+
+### Features
+
+* update path ([d389485](https://github.com/officialpycasbin/pymongo-adapter/commit/d38948567df33d4d13198f2fd41ae0eadd0f8035))
+
 ## [1.1.1](https://github.com/officialpycasbin/pymongo-adapter/compare/v1.1.0...v1.1.1) (2024-11-11)
 
 
