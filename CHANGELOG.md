@@ -1,5 +1,12 @@
 # Semantic Versioning Changelog
 
+## [1.1.1](https://github.com/officialpycasbin/pymongo-adapter/compare/v1.1.0...v1.1.1) (2024-11-11)
+
+
+### Bug Fixes
+
+* modify remove_filtered_policy method to support filtering of empty strings ([#12](https://github.com/officialpycasbin/pymongo-adapter/issues/12)) ([37e0561](https://github.com/officialpycasbin/pymongo-adapter/commit/37e0561bb678f11f291360a6eaf58121db6b7630))
+
 # [1.1.0](https://github.com/pycasbin/pymongo-adapter/compare/v1.0.0...v1.1.0) (2024-03-29)
 
 
