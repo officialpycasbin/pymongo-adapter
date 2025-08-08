@@ -1,5 +1,12 @@
 # Semantic Versioning Changelog
 
+# [1.3.0](https://github.com/officialpycasbin/pymongo-adapter/compare/v1.2.0...v1.3.0) (2025-08-08)
+
+
+### Features
+
+* support PyMongo Async API ([285510d](https://github.com/officialpycasbin/pymongo-adapter/commit/285510d1918c154d272921146c1b5dcc4b5f65be))
+
 # [1.2.0](https://github.com/officialpycasbin/pymongo-adapter/compare/v1.1.1...v1.2.0) (2024-11-11)
 
 
