@@ -43,12 +43,6 @@ class Adapter(AsyncAdapter):
             setattr(line, f"v{index}", value)
         await self._collection.insert_one(line.dict())
 
-    def _find_policy_lines(self, ptype, rule):
-        line = CasbinRule(ptype=ptype)
-        for index, value in enumerate(rule):
-            setattr(line, f"v{index}", value)
-        return self._collection.find(line.dict())
-
     async def _delete_policy_lines(self, ptype, rule):
         line = CasbinRule(ptype=ptype)
         for index, value in enumerate(rule):
