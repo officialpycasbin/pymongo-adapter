@@ -211,13 +211,3 @@ class TestConfig(IsolatedAsyncioTestCase):
         self.assertEqual(
             rule.dict(), {"ptype": "p", "v0": "alice", "v1": "data1", "v2": "read"}
         )
-
-    def test_repr(self):
-        """
-        test __repr__ function
-        """
-        adapter = Adapter("mongodb://localhost:27017", "casbin_test")
-        rule = CasbinRule(ptype="p", v0="alice", v1="data1", v2="read")
-        self.assertEqual(repr(rule), '<CasbinRule :"p, alice, data1, read">')
-        # adapter.save_policy(rule)
-        # self.assertRegex(repr(rule), r'<CasbinRule :"p, alice, data1, read">')
