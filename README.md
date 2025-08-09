@@ -1,12 +1,12 @@
 PyMongo Adapter for PyCasbin
 ====
 
-[![Build Status](https://www.travis-ci.org/officialpycasbin/pymongo-adapter.svg?branch=master)](https://www.travis-ci.org/officialpycasbin/pymongo-adapter)
+[![build Status](https://github.com/officialpycasbin/pymongo-adapter/actions/workflows/main.yml/badge.svg)](https://github.com/officialpycasbin/pymongo-adapter/actions/workflows/main.yml)
 [![Coverage Status](https://coveralls.io/repos/github/officialpycasbin/pymongo-adapter/badge.svg)](https://coveralls.io/github/officialpycasbin/pymongo-adapter)
 [![Version](https://img.shields.io/pypi/v/casbin_pymongo_adapter.svg)](https://pypi.org/project/casbin_pymongo_adapter/)
 [![PyPI - Wheel](https://img.shields.io/pypi/wheel/casbin_pymongo_adapter.svg)](https://pypi.org/project/casbin_pymongo_adapter/)
 [![Pyversions](https://img.shields.io/pypi/pyversions/casbin_pymongo_adapter.svg)](https://pypi.org/project/casbin_pymongo_adapter/)
-[![Download](https://img.shields.io/pypi/dm/casbin_pymongo_adapter.svg)](https://pypi.org/project/casbin_pymongo_adapter/)
+[![Download](https://static.pepy.tech/badge/casbin_pymongo_adapter)](https://pypi.org/project/casbin_pymongo_adapter/)
 [![License](https://img.shields.io/pypi/l/casbin_pymongo_adapter.svg)](https://pypi.org/project/casbin_pymongo_adapter/)
 
 PyMongo Adapter is the [PyMongo](https://pypi.org/project/pymongo/) adapter for [PyCasbin](https://github.com/casbin/pycasbin). With this library, Casbin can load policy from MongoDB or save policy to it.
