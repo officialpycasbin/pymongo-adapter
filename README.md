@@ -11,6 +11,8 @@ PyMongo Adapter for PyCasbin
 
 PyMongo Adapter is the [PyMongo](https://pypi.org/project/pymongo/) adapter for [PyCasbin](https://github.com/casbin/pycasbin). With this library, Casbin can load policy from MongoDB or save policy to it.
 
+This adapter supports both synchronous and asynchronous PyMongo APIs.
+
 ## Installation
 
 ```
@@ -37,6 +39,38 @@ if e.enforce(sub, obj, act):
 else:
     # deny the request, show an error
     pass
+
+# define filter conditions
+from casbin_pymongo_adapter import Filter
+
+filter = Filter()
+filter.ptype = ["p"]
+filter.v0 = ["alice"]
+
+# support MongoDB native query
+filter.raw_query = {
+    "ptype": "p",
+    "v0": {
+        "$in": ["alice"]
+    }
+}
+
+# In this case, load only policies with sub value alice
+e.load_filtered_policy(filter)
+```
+
+## Async Example
+
+```python
+from casbin_pymongo_adapter.asynchronous import Adapter
+import casbin
+
+adapter = Adapter('mongodb://localhost:27017/', "dbname")
+e = casbin.AsyncEnforcer('path/to/model.conf', adapter)
+
+# Note: AsyncEnforcer does not automatically load policies.
+# You need to call load_policy() manually.
+await e.load_policy()
 ```
 
 
