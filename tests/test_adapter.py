@@ -343,6 +343,35 @@ class TestConfig(TestCase):
         self.assertFalse(e.enforce("bob", "data2", "read"))
         self.assertTrue(e.enforce("bob", "data2", "write"))
 
+    async def test_update_policy(self):
+        e = get_enforcer()
+        example_p = ["mike", "cookie", "eat"]
+
+        self.assertTrue(e.enforce("alice", "data1", "read"))
+        e.update_policy(["alice", "data1", "read"], ["alice", "data1", "no_read"])
+        self.assertFalse(e.enforce("alice", "data1", "read"))
+
+        self.assertFalse(e.enforce("bob", "data1", "read"))
+        e.add_policy(example_p)
+        e.update_policy(example_p, ["bob", "data1", "read"])
+        self.assertTrue(e.enforce("bob", "data1", "read"))
+
+        self.assertFalse(e.enforce("bob", "data1", "write"))
+        e.update_policy(["bob", "data1", "read"], ["bob", "data1", "write"])
+        self.assertTrue(e.enforce("bob", "data1", "write"))
+
+        self.assertTrue(e.enforce("bob", "data2", "write"))
+        e.update_policy(["bob", "data2", "write"], ["bob", "data2", "read"])
+        self.assertFalse(e.enforce("bob", "data2", "write"))
+
+        self.assertTrue(e.enforce("bob", "data2", "read"))
+        e.update_policy(["bob", "data2", "read"], ["carl", "data2", "write"])
+        self.assertFalse(e.enforce("bob", "data2", "write"))
+
+        self.assertTrue(e.enforce("carl", "data2", "write"))
+        e.update_policy(["carl", "data2", "write"], ["carl", "data2", "no_write"])
+        self.assertFalse(e.enforce("bob", "data2", "write"))
+
     def test_str(self):
         """
         test __str__ function
