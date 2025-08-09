@@ -1,6 +1,5 @@
-from casbin_pymongo_adapter._filter import Filter
-from casbin_pymongo_adapter.asynchronous.adapter import Adapter
-from casbin_pymongo_adapter._rule import CasbinRule
+from casbin_pymongo_adapter.asynchronous import Adapter
+from casbin_pymongo_adapter import Filter
 from pymongo import AsyncMongoClient
 from unittest import IsolatedAsyncioTestCase
 import casbin

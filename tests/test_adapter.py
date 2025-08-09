@@ -1,6 +1,5 @@
-from casbin_pymongo_adapter._filter import Filter
-from casbin_pymongo_adapter.adapter import Adapter
 from casbin_pymongo_adapter._rule import CasbinRule
+from casbin_pymongo_adapter import Filter, Adapter
 from pymongo import MongoClient
 from unittest import TestCase
 import casbin
