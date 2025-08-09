@@ -372,6 +372,36 @@ class TestConfig(TestCase):
         e.update_policy(["carl", "data2", "write"], ["carl", "data2", "no_write"])
         self.assertFalse(e.enforce("bob", "data2", "write"))
 
+    async def test_update_policies(self):
+        e = get_enforcer()
+
+        old_rule_0 = ["alice", "data1", "read"]
+        old_rule_1 = ["bob", "data2", "write"]
+        old_rule_2 = ["data2_admin", "data2", "read"]
+        old_rule_3 = ["data2_admin", "data2", "write"]
+
+        new_rule_0 = ["alice", "data_test", "read"]
+        new_rule_1 = ["bob", "data_test", "write"]
+        new_rule_2 = ["data2_admin", "data_test", "read"]
+        new_rule_3 = ["data2_admin", "data_test", "write"]
+
+        old_rules = [old_rule_0, old_rule_1, old_rule_2, old_rule_3]
+        new_rules = [new_rule_0, new_rule_1, new_rule_2, new_rule_3]
+
+        e.update_policies(old_rules, new_rules)
+
+        self.assertFalse(e.enforce("alice", "data1", "read"))
+        self.assertTrue(e.enforce("alice", "data_test", "read"))
+
+        self.assertFalse(e.enforce("bob", "data2", "write"))
+        self.assertTrue(e.enforce("bob", "data_test", "write"))
+
+        self.assertFalse(e.enforce("data2_admin", "data2", "read"))
+        self.assertTrue(e.enforce("data2_admin", "data_test", "read"))
+
+        self.assertFalse(e.enforce("data2_admin", "data2", "write"))
+        self.assertTrue(e.enforce("data2_admin", "data_test", "write"))
+
     def test_str(self):
         """
         test __str__ function

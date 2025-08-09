@@ -195,3 +195,15 @@ class Adapter(persist.Adapter):
         )
 
         return None
+
+    def update_policies(self, sec, ptype, old_rules, new_rules):
+        """Update the old_rule with the new_rule in the database (storage).
+
+        Args:
+            sec (str): section type
+            ptype (str): policy type
+            old_rules (list[list[str]]): the old rules that needs to be modified
+            new_rules (list[list[str]]): the new rules to replace the old rule
+        """
+        for old_rule, new_rule in zip(old_rules, new_rules):
+            self.update_policy(sec, ptype, old_rule, new_rule)
