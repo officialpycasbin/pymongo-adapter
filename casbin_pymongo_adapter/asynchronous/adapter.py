@@ -169,3 +169,23 @@ class Adapter(AsyncAdapter):
         query["ptype"] = ptype
         results = await self._collection.delete_many(query)
         return results.deleted_count > 0
+
+    async def update_policy(self, sec, ptype, old_rule, new_rule):
+        """Update the old_rule with the new_rule in the database (storage).
+
+        Args:
+            sec (str): section type
+            ptype (str): policy type
+            old_rule (list[str]): the old rule that needs to be modified
+            new_rule (list[str]): the new rule to replace the old rule
+        """
+        filter_query = {}
+        for index, value in enumerate(old_rule):
+            filter_query[f"v{index}"] = value
+
+        await self._collection.find_one_and_update(
+            filter_query,
+            {"$set": {f"v{index}": value for index, value in enumerate(new_rule)}},
+        )
+
+        return None

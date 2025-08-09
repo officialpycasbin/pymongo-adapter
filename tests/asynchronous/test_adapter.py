@@ -338,3 +338,32 @@ class TestConfig(IsolatedAsyncioTestCase):
         self.assertFalse(e.enforce("bob", "data1", "write"))
         self.assertFalse(e.enforce("bob", "data2", "read"))
         self.assertTrue(e.enforce("bob", "data2", "write"))
+
+    async def test_update_policy(self):
+        e = await get_enforcer()
+        example_p = ["mike", "cookie", "eat"]
+
+        self.assertTrue(e.enforce("alice", "data1", "read"))
+        await e.update_policy(["alice", "data1", "read"], ["alice", "data1", "no_read"])
+        self.assertFalse(e.enforce("alice", "data1", "read"))
+
+        self.assertFalse(e.enforce("bob", "data1", "read"))
+        await e.add_policy(example_p)
+        await e.update_policy(example_p, ["bob", "data1", "read"])
+        self.assertTrue(e.enforce("bob", "data1", "read"))
+
+        self.assertFalse(e.enforce("bob", "data1", "write"))
+        await e.update_policy(["bob", "data1", "read"], ["bob", "data1", "write"])
+        self.assertTrue(e.enforce("bob", "data1", "write"))
+
+        self.assertTrue(e.enforce("bob", "data2", "write"))
+        await e.update_policy(["bob", "data2", "write"], ["bob", "data2", "read"])
+        self.assertFalse(e.enforce("bob", "data2", "write"))
+
+        self.assertTrue(e.enforce("bob", "data2", "read"))
+        await e.update_policy(["bob", "data2", "read"], ["carl", "data2", "write"])
+        self.assertFalse(e.enforce("bob", "data2", "write"))
+
+        self.assertTrue(e.enforce("carl", "data2", "write"))
+        await e.update_policy(["carl", "data2", "write"], ["carl", "data2", "no_write"])
+        self.assertFalse(e.enforce("bob", "data2", "write"))
