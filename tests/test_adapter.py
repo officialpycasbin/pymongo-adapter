@@ -1,3 +1,4 @@
+from casbin_pymongo_adapter._filter import Filter
 from casbin_pymongo_adapter.adapter import Adapter
 from casbin_pymongo_adapter._rule import CasbinRule
 from pymongo import MongoClient
@@ -199,6 +200,149 @@ class TestConfig(TestCase):
         self.assertTrue(e.enforce("bob", "data2", "write"))
         self.assertFalse(e.enforce("alice", "data2", "read"))
         self.assertFalse(e.enforce("alice", "data2", "write"))
+
+    async def test_filtered_policy(self):
+        """
+        test filtered_policy
+        """
+        e = get_enforcer()
+        filter = Filter()
+
+        filter.ptype = ["p"]
+        e.load_filtered_policy(filter)
+        self.assertTrue(e.enforce("alice", "data1", "read"))
+        self.assertFalse(e.enforce("alice", "data1", "write"))
+        self.assertFalse(e.enforce("alice", "data2", "read"))
+        self.assertFalse(e.enforce("alice", "data2", "write"))
+        self.assertFalse(e.enforce("bob", "data1", "read"))
+        self.assertFalse(e.enforce("bob", "data1", "write"))
+        self.assertFalse(e.enforce("bob", "data2", "read"))
+        self.assertTrue(e.enforce("bob", "data2", "write"))
+
+        filter.ptype = []
+        filter.v0 = ["alice"]
+        e.load_filtered_policy(filter)
+        self.assertTrue(e.enforce("alice", "data1", "read"))
+        self.assertFalse(e.enforce("alice", "data1", "write"))
+        self.assertFalse(e.enforce("alice", "data2", "read"))
+        self.assertFalse(e.enforce("alice", "data2", "write"))
+        self.assertFalse(e.enforce("bob", "data1", "read"))
+        self.assertFalse(e.enforce("bob", "data1", "write"))
+        self.assertFalse(e.enforce("bob", "data2", "read"))
+        self.assertFalse(e.enforce("bob", "data2", "write"))
+        self.assertFalse(e.enforce("data2_admin", "data2", "read"))
+        self.assertFalse(e.enforce("data2_admin", "data2", "write"))
+
+        filter.v0 = ["bob"]
+        e.load_filtered_policy(filter)
+        self.assertFalse(e.enforce("alice", "data1", "read"))
+        self.assertFalse(e.enforce("alice", "data1", "write"))
+        self.assertFalse(e.enforce("alice", "data2", "read"))
+        self.assertFalse(e.enforce("alice", "data2", "write"))
+        self.assertFalse(e.enforce("bob", "data1", "read"))
+        self.assertFalse(e.enforce("bob", "data1", "write"))
+        self.assertFalse(e.enforce("bob", "data2", "read"))
+        self.assertTrue(e.enforce("bob", "data2", "write"))
+        self.assertFalse(e.enforce("data2_admin", "data2", "read"))
+        self.assertFalse(e.enforce("data2_admin", "data2", "write"))
+
+        filter.v0 = ["data2_admin"]
+        e.load_filtered_policy(filter)
+        self.assertTrue(e.enforce("data2_admin", "data2", "read"))
+        self.assertTrue(e.enforce("data2_admin", "data2", "read"))
+        self.assertFalse(e.enforce("alice", "data1", "read"))
+        self.assertFalse(e.enforce("alice", "data1", "write"))
+        self.assertFalse(e.enforce("alice", "data2", "read"))
+        self.assertFalse(e.enforce("alice", "data2", "write"))
+        self.assertFalse(e.enforce("bob", "data1", "read"))
+        self.assertFalse(e.enforce("bob", "data1", "write"))
+        self.assertFalse(e.enforce("bob", "data2", "read"))
+        self.assertFalse(e.enforce("bob", "data2", "write"))
+
+        filter.v0 = ["alice", "bob"]
+        e.load_filtered_policy(filter)
+        self.assertTrue(e.enforce("alice", "data1", "read"))
+        self.assertFalse(e.enforce("alice", "data1", "write"))
+        self.assertFalse(e.enforce("alice", "data2", "read"))
+        self.assertFalse(e.enforce("alice", "data2", "write"))
+        self.assertFalse(e.enforce("bob", "data1", "read"))
+        self.assertFalse(e.enforce("bob", "data1", "write"))
+        self.assertFalse(e.enforce("bob", "data2", "read"))
+        self.assertTrue(e.enforce("bob", "data2", "write"))
+        self.assertFalse(e.enforce("data2_admin", "data2", "read"))
+        self.assertFalse(e.enforce("data2_admin", "data2", "write"))
+
+        filter.v0 = []
+        filter.v1 = ["data1"]
+        e.load_filtered_policy(filter)
+        self.assertTrue(e.enforce("alice", "data1", "read"))
+        self.assertFalse(e.enforce("alice", "data1", "write"))
+        self.assertFalse(e.enforce("alice", "data2", "read"))
+        self.assertFalse(e.enforce("alice", "data2", "write"))
+        self.assertFalse(e.enforce("bob", "data1", "read"))
+        self.assertFalse(e.enforce("bob", "data1", "write"))
+        self.assertFalse(e.enforce("bob", "data2", "read"))
+        self.assertFalse(e.enforce("bob", "data2", "write"))
+        self.assertFalse(e.enforce("data2_admin", "data2", "read"))
+        self.assertFalse(e.enforce("data2_admin", "data2", "write"))
+
+        filter.v1 = ["data2"]
+        e.load_filtered_policy(filter)
+        self.assertFalse(e.enforce("alice", "data1", "read"))
+        self.assertFalse(e.enforce("alice", "data1", "write"))
+        self.assertFalse(e.enforce("alice", "data2", "read"))
+        self.assertFalse(e.enforce("alice", "data2", "write"))
+        self.assertFalse(e.enforce("bob", "data1", "read"))
+        self.assertFalse(e.enforce("bob", "data1", "write"))
+        self.assertFalse(e.enforce("bob", "data2", "read"))
+        self.assertTrue(e.enforce("bob", "data2", "write"))
+        self.assertTrue(e.enforce("data2_admin", "data2", "read"))
+        self.assertTrue(e.enforce("data2_admin", "data2", "write"))
+
+        filter.v1 = []
+        filter.v2 = ["read"]
+        e.load_filtered_policy(filter)
+        self.assertTrue(e.enforce("alice", "data1", "read"))
+        self.assertFalse(e.enforce("alice", "data1", "write"))
+        self.assertFalse(e.enforce("alice", "data2", "read"))
+        self.assertFalse(e.enforce("alice", "data2", "write"))
+        self.assertFalse(e.enforce("bob", "data1", "read"))
+        self.assertFalse(e.enforce("bob", "data1", "write"))
+        self.assertFalse(e.enforce("bob", "data2", "read"))
+        self.assertFalse(e.enforce("bob", "data2", "write"))
+        self.assertTrue(e.enforce("data2_admin", "data2", "read"))
+        self.assertFalse(e.enforce("data2_admin", "data2", "write"))
+
+        filter.v2 = ["write"]
+        e.load_filtered_policy(filter)
+        self.assertFalse(e.enforce("alice", "data1", "read"))
+        self.assertFalse(e.enforce("alice", "data1", "write"))
+        self.assertFalse(e.enforce("alice", "data2", "read"))
+        self.assertFalse(e.enforce("alice", "data2", "write"))
+        self.assertFalse(e.enforce("bob", "data1", "read"))
+        self.assertFalse(e.enforce("bob", "data1", "write"))
+        self.assertFalse(e.enforce("bob", "data2", "read"))
+        self.assertTrue(e.enforce("bob", "data2", "write"))
+        self.assertFalse(e.enforce("data2_admin", "data2", "read"))
+        self.assertTrue(e.enforce("data2_admin", "data2", "write"))
+
+    async def test_filtered_policy_with_raw_query(self):
+        """
+        test filtered_policy
+        """
+        e = get_enforcer()
+        filter = Filter()
+        filter.raw_query = {"ptype": "p", "v0": {"$in": ["alice", "bob"]}}
+
+        e.load_filtered_policy(filter)
+        self.assertTrue(e.enforce("alice", "data1", "read"))
+        self.assertFalse(e.enforce("alice", "data1", "write"))
+        self.assertFalse(e.enforce("alice", "data2", "read"))
+        self.assertFalse(e.enforce("alice", "data2", "write"))
+        self.assertFalse(e.enforce("bob", "data1", "read"))
+        self.assertFalse(e.enforce("bob", "data1", "write"))
+        self.assertFalse(e.enforce("bob", "data2", "read"))
+        self.assertTrue(e.enforce("bob", "data2", "write"))
 
     def test_str(self):
         """

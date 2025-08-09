@@ -7,7 +7,13 @@ from ._rule import CasbinRule
 class Adapter(persist.Adapter):
     """the interface for Casbin adapters."""
 
-    def __init__(self, uri, dbname, collection="casbin_rule"):
+    def __init__(
+        self,
+        uri,
+        dbname,
+        collection="casbin_rule",
+        filtered=False,
+    ):
         """Create an adapter for Mongodb
 
         Args:
@@ -15,10 +21,15 @@ class Adapter(persist.Adapter):
                           See https://pymongo.readthedocs.io/en/stable/api/pymongo/mongo_client.html#pymongo.mongo_client.MongoClient.
             dbname (str): Database to store policy.
             collection (str, optional): Collection of the choosen database. Defaults to "casbin_rule".
+            filtered (bool, optional): Whether to use filtered query. Defaults to False.
         """
         client = MongoClient(uri)
         db = client[dbname]
         self._collection = db[collection]
+        self._filtered = filtered
+
+    def is_filtered(self):
+        return self._filtered
 
     def load_policy(self, model):
         """Implementing add Interface for casbin. Load all policy rules from mongodb
@@ -35,6 +46,32 @@ class Adapter(persist.Adapter):
                 setattr(rule, key, value)
 
             persist.load_policy_line(str(rule), model)
+
+    def load_filtered_policy(self, model, filter):
+        """Load filtered policy rules from mongodb
+
+        Args:
+            model (CasbinRule): CasbinRule object
+            filter (Filter): Filter rule object
+        """
+        query = {}
+        if getattr(filter, "raw_query", None) is None:
+            for attr in ("ptype", "v0", "v1", "v2", "v3", "v4", "v5"):
+                if len(getattr(filter, attr)) > 0:
+                    value = getattr(filter, attr)
+                    query[attr] = {"$in": value}
+        else:
+            query = getattr(filter, "raw_query")
+
+        for line in self._collection.find(query):
+            if "ptype" not in line:
+                continue
+            rule = CasbinRule(line["ptype"])
+            for key, value in line.items():
+                setattr(rule, key, value)
+
+            persist.load_policy_line(str(rule), model)
+        self._filtered = True
 
     def _save_policy_line(self, ptype, rule):
         line = CasbinRule(ptype=ptype)
