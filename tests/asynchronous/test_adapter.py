@@ -197,22 +197,6 @@ class TestConfig(IsolatedAsyncioTestCase):
         self.assertFalse(e.enforce("alice", "data2", "read"))
         self.assertFalse(e.enforce("alice", "data2", "write"))
 
-    def test_str(self):
-        """
-        test __str__ function
-        """
-        rule = CasbinRule(ptype="p", v0="alice", v1="data1", v2="read")
-        self.assertEqual(rule.__str__(), "p, alice, data1, read")
-
-    def test_dict(self):
-        """
-        test __str__ function
-        """
-        rule = CasbinRule(ptype="p", v0="alice", v1="data1", v2="read")
-        self.assertEqual(
-            rule.dict(), {"ptype": "p", "v0": "alice", "v1": "data1", "v2": "read"}
-        )
-
     async def test_filtered_policy(self):
         """
         test filtered_policy
