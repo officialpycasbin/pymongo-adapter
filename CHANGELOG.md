@@ -1,5 +1,12 @@
 # Semantic Versioning Changelog
 
+# [1.5.0](https://github.com/officialpycasbin/pymongo-adapter/compare/v1.4.0...v1.5.0) (2025-08-09)
+
+
+### Features
+
+* support sync & async update_policy / update_policies ([#7](https://github.com/officialpycasbin/pymongo-adapter/issues/7)) ([a36cf53](https://github.com/officialpycasbin/pymongo-adapter/commit/a36cf5332ec26a5ca9636e9faf205f65a615dd27))
+
 # [1.4.0](https://github.com/officialpycasbin/pymongo-adapter/compare/v1.3.0...v1.4.0) (2025-08-09)
 
 
