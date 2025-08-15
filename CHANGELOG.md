@@ -1,5 +1,12 @@
 # Semantic Versioning Changelog
 
+# [1.6.0](https://github.com/officialpycasbin/pymongo-adapter/compare/v1.5.0...v1.6.0) (2025-08-15)
+
+
+### Features
+
+* switch from casbin to pycasbin ([#8](https://github.com/officialpycasbin/pymongo-adapter/issues/8)) ([24b7c92](https://github.com/officialpycasbin/pymongo-adapter/commit/24b7c923418a3b69478a293138a9d1b89f4aaabf))
+
 # [1.5.0](https://github.com/officialpycasbin/pymongo-adapter/compare/v1.4.0...v1.5.0) (2025-08-09)
 
 
