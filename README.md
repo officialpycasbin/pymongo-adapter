@@ -59,6 +59,24 @@ filter.raw_query = {
 e.load_filtered_policy(filter)
 ```
 
+## Using an Existing MongoDB Client
+
+If you already have a MongoDB client instance in your application, you can reuse it:
+
+```python
+from pymongo import MongoClient
+import casbin_pymongo_adapter
+import casbin
+
+# Create or use your existing MongoDB client
+mongo_client = MongoClient('mongodb://localhost:27017/')
+
+# Pass the client to the adapter
+adapter = casbin_pymongo_adapter.Adapter(client=mongo_client, db_name="casbin")
+
+e = casbin.Enforcer('path/to/model.conf', adapter, True)
+```
+
 ## Async Example
 
 ```python
@@ -70,6 +88,23 @@ e = casbin.AsyncEnforcer('path/to/model.conf', adapter)
 
 # Note: AsyncEnforcer does not automatically load policies.
 # You need to call load_policy() manually.
+await e.load_policy()
+```
+
+### Using an Existing AsyncMongoClient
+
+```python
+from pymongo import AsyncMongoClient
+from casbin_pymongo_adapter.asynchronous import Adapter
+import casbin
+
+# Create or use your existing AsyncMongoClient
+mongo_client = AsyncMongoClient('mongodb://localhost:27017/')
+
+# Pass the client to the adapter
+adapter = Adapter(client=mongo_client, db_name="casbin")
+e = casbin.AsyncEnforcer('path/to/model.conf', adapter)
+
 await e.load_policy()
 ```
 
