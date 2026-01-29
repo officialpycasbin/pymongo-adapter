@@ -72,7 +72,7 @@ import casbin
 mongo_client = MongoClient('mongodb://localhost:27017/')
 
 # Pass the client to the adapter
-adapter = casbin_pymongo_adapter.Adapter(client=mongo_client, db_name="dbname")
+adapter = casbin_pymongo_adapter.Adapter(client=mongo_client, db_name="casbin")
 
 e = casbin.Enforcer('path/to/model.conf', adapter, True)
 ```
@@ -102,7 +102,7 @@ import casbin
 mongo_client = AsyncMongoClient('mongodb://localhost:27017/')
 
 # Pass the client to the adapter
-adapter = Adapter(client=mongo_client, db_name="dbname")
+adapter = Adapter(client=mongo_client, db_name="casbin")
 e = casbin.AsyncEnforcer('path/to/model.conf', adapter)
 
 await e.load_policy()

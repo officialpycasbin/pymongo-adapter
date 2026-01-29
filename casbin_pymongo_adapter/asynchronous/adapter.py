@@ -28,6 +28,9 @@ class Adapter(AsyncAdapter):
             filtered (bool, optional): Whether to use filtered query. Defaults to False.
             client (AsyncMongoClient, optional): An existing AsyncMongoClient instance to reuse. If provided, uri is ignored.
             db_name (str, optional): Database name to use with the provided client. Takes precedence over dbname.
+        
+        Note:
+            When both client and uri are provided, client takes precedence and uri is ignored.
         """
         # Support both db_name and dbname for backward compatibility
         database_name = db_name if db_name is not None else dbname

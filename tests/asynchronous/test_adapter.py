@@ -405,24 +405,27 @@ class TestConfig(IsolatedAsyncioTestCase):
         # Create an AsyncMongoClient instance
         client = AsyncMongoClient("mongodb://localhost:27017")
         
-        # Create adapter with existing client
-        adapter = Adapter(client=client, db_name="casbin_test")
-        
-        e = casbin.AsyncEnforcer(get_fixture("rbac_model.conf"), adapter)
-        model = e.get_model()
+        try:
+            # Create adapter with existing client
+            adapter = Adapter(client=client, db_name="casbin_test")
+            
+            e = casbin.AsyncEnforcer(get_fixture("rbac_model.conf"), adapter)
+            model = e.get_model()
 
-        model.clear_policy()
-        model.add_policy("p", "p", ["alice", "data1", "read"])
-        await adapter.save_policy(model)
+            model.clear_policy()
+            model.add_policy("p", "p", ["alice", "data1", "read"])
+            await adapter.save_policy(model)
 
-        # reload policies from database
-        await e.load_policy()
+            # reload policies from database
+            await e.load_policy()
 
-        self.assertTrue(e.enforce("alice", "data1", "read"))
-        self.assertFalse(e.enforce("alice", "data1", "write"))
-        
-        # Clean up
-        await client.drop_database("casbin_test")
+            self.assertTrue(e.enforce("alice", "data1", "read"))
+            self.assertFalse(e.enforce("alice", "data1", "write"))
+            
+            # Clean up
+            await client.drop_database("casbin_test")
+        finally:
+            client.close()
 
     async def test_adapter_with_existing_client_and_dbname(self):
         """
@@ -431,24 +434,27 @@ class TestConfig(IsolatedAsyncioTestCase):
         # Create an AsyncMongoClient instance
         client = AsyncMongoClient("mongodb://localhost:27017")
         
-        # Create adapter with existing client using dbname instead of db_name
-        adapter = Adapter(client=client, dbname="casbin_test")
-        
-        e = casbin.AsyncEnforcer(get_fixture("rbac_model.conf"), adapter)
-        model = e.get_model()
+        try:
+            # Create adapter with existing client using dbname instead of db_name
+            adapter = Adapter(client=client, dbname="casbin_test")
+            
+            e = casbin.AsyncEnforcer(get_fixture("rbac_model.conf"), adapter)
+            model = e.get_model()
 
-        model.clear_policy()
-        model.add_policy("p", "p", ["bob", "data2", "write"])
-        await adapter.save_policy(model)
+            model.clear_policy()
+            model.add_policy("p", "p", ["bob", "data2", "write"])
+            await adapter.save_policy(model)
 
-        # reload policies from database
-        await e.load_policy()
+            # reload policies from database
+            await e.load_policy()
 
-        self.assertTrue(e.enforce("bob", "data2", "write"))
-        self.assertFalse(e.enforce("bob", "data2", "read"))
-        
-        # Clean up
-        await client.drop_database("casbin_test")
+            self.assertTrue(e.enforce("bob", "data2", "write"))
+            self.assertFalse(e.enforce("bob", "data2", "read"))
+            
+            # Clean up
+            await client.drop_database("casbin_test")
+        finally:
+            client.close()
 
     async def test_adapter_with_client_requires_db_name(self):
         """
@@ -456,10 +462,13 @@ class TestConfig(IsolatedAsyncioTestCase):
         """
         client = AsyncMongoClient("mongodb://localhost:27017")
         
-        with self.assertRaises(ValueError) as context:
-            adapter = Adapter(client=client)
-        
-        self.assertIn("db_name or dbname must be provided", str(context.exception))
+        try:
+            with self.assertRaises(ValueError) as context:
+                adapter = Adapter(client=client)
+            
+            self.assertIn("db_name or dbname must be provided", str(context.exception))
+        finally:
+            client.close()
 
     async def test_adapter_without_client_requires_uri(self):
         """
