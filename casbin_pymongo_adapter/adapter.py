@@ -9,22 +9,42 @@ class Adapter(persist.Adapter):
 
     def __init__(
         self,
-        uri,
-        dbname,
+        uri=None,
+        dbname=None,
         collection="casbin_rule",
         filtered=False,
+        client=None,
+        db_name=None,
     ):
         """Create an adapter for Mongodb
 
         Args:
-            uri (str): This should be the same requiement as pymongo Client's 'uri' parameter.
+            uri (str, optional): This should be the same requiement as pymongo Client's 'uri' parameter.
                           See https://pymongo.readthedocs.io/en/stable/api/pymongo/mongo_client.html#pymongo.mongo_client.MongoClient.
-            dbname (str): Database to store policy.
+                          Required if client is not provided.
+            dbname (str, optional): Database to store policy. Required if client is not provided.
             collection (str, optional): Collection of the choosen database. Defaults to "casbin_rule".
             filtered (bool, optional): Whether to use filtered query. Defaults to False.
+            client (MongoClient, optional): An existing MongoClient instance to reuse. If provided, uri is ignored.
+            db_name (str, optional): Database name to use with the provided client. Takes precedence over dbname.
         """
-        client = MongoClient(uri)
-        db = client[dbname]
+        # Support both db_name and dbname for backward compatibility
+        database_name = db_name if db_name is not None else dbname
+        
+        if client is not None:
+            # Use the provided client
+            if database_name is None:
+                raise ValueError("db_name or dbname must be provided when using an existing client")
+            mongo_client = client
+        else:
+            # Create a new client from URI
+            if uri is None:
+                raise ValueError("uri must be provided when client is not specified")
+            if database_name is None:
+                raise ValueError("dbname must be provided when client is not specified")
+            mongo_client = MongoClient(uri)
+        
+        db = mongo_client[database_name]
         self._collection = db[collection]
         self._filtered = filtered
 
